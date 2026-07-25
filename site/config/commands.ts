@@ -19,12 +19,12 @@ export const COMMANDS: Command[] = [
     args: '-m "msg"',
     description: "record a snapshot",
   },
-  { git: "status", name: "status", description: "what's changed" },
+  { git: "status", name: "check", description: "what's changed" },
   { git: "log", name: "history", description: "walk past saves" },
-  { git: "diff", name: "diff", description: "line-by-line changes" },
+  { git: "diff", name: "compare", description: "line-by-line changes" },
   {
     git: "branch",
-    name: "branch",
+    name: "fork",
     args: "<name>",
     description: "fork a line of work",
   },
@@ -36,7 +36,7 @@ export const COMMANDS: Command[] = [
   },
   {
     git: "merge",
-    name: "merge",
+    name: "join",
     args: "<branch>",
     description: "bring branches together",
   },
@@ -48,7 +48,12 @@ export const COMMANDS: Command[] = [
     args: "<url>",
     description: "connect to a remote",
   },
-  { git: "clone", name: "copy", args: "<url>", description: "duplicate a repo" },
+  {
+    git: "clone",
+    name: "copy",
+    args: "<url>",
+    description: "duplicate a repo",
+  },
   {
     git: "tag",
     name: "mark",
