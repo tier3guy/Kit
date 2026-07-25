@@ -4,55 +4,82 @@
 #include <string>
 #include <vector>
 
-namespace {
+namespace
+{
 
-const char* kVersion = "0.1.0";
+    const char *kVersion = "0.1.0";
 
-void print_usage() {
-    std::cout << "kit - a version control system\n"
-              << "\n"
-              << "usage: kit <command> [<args>]\n"
-              << "\n"
-              << "commands:\n"
-              << "  new        create a new kit repository\n"
-              << "  park       shelve the current working directory\n"
-              << "  park list  list the parks, newest first\n"
-              << "  tree       print the working directory as a snapshot tree\n"
-              << "  help       show this message\n"
-              << "  version    show the kit version\n";
-}
+    void print_usage()
+    {
+        std::cout << "kit - a version control system\n"
+                  << "\n"
+                  << "usage: kit <command> [<args>]\n"
+                  << "\n"
+                  << "commands:\n"
+                  << "  new           create a new kit repository\n"
+                  << "  stage <path>  stage a file or directory ('.' for everything)\n"
+                  << "  save -m <msg> save the staged snapshot as a new commit\n"
+                  << "  history       show commits, newest first\n"
+                  << "  park          shelve the current working directory\n"
+                  << "  park list     list the parks, newest first\n"
+                  << "  tree          print the working directory as a snapshot tree\n"
+                  << "  help          show this message\n"
+                  << "  version       show the kit version\n";
+    }
 
 } // namespace
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv)
+{
     std::vector<std::string> args(argv + 1, argv + argc);
 
-    if (args.empty()) {
+    if (args.empty())
+    {
         print_usage();
         return 1;
     }
 
-    const std::string& command = args[0];
+    const std::string &command = args[0];
     const std::vector<std::string> rest(args.begin() + 1, args.end());
 
-    if (command == "new") {
+    if (command == "new")
+    {
         return cmd_new(rest);
     }
 
-    if (command == "park") {
+    if (command == "park")
+    {
         return cmd_park(rest);
     }
 
-    if (command == "tree") {
+    if (command == "tree")
+    {
         return cmd_tree(rest);
     }
 
-    if (command == "help" || command == "-h" || command == "--help") {
+    if (command == "stage")
+    {
+        return cmd_stage(rest);
+    }
+
+    if (command == "save")
+    {
+        return cmd_save(rest);
+    }
+
+    if (command == "history")
+    {
+        return cmd_history(rest);
+    }
+
+    if (command == "help" || command == "-h" || command == "--help")
+    {
         print_usage();
         return 0;
     }
 
-    if (command == "version" || command == "-v" || command == "--version") {
+    if (command == "version" || command == "-v" || command == "--version")
+    {
         std::cout << "kit version " << kVersion << "\n";
         return 0;
     }
