@@ -1,5 +1,7 @@
 import DownloadButton from "@/components/DownloadButton";
 import CommandTable from "@/components/CommandTable";
+import InstallGuide from "@/components/InstallGuide";
+import { Github, Globe, Linkedin, Mail } from "lucide-react";
 
 export default function Home() {
   return (
@@ -31,7 +33,7 @@ export default function Home() {
         <div className="mt-8">
           <DownloadButton />
           <p className="mt-3 text-xs text-[var(--ink-dim)]">
-            placeholder build for now — swap in the real binary any time.
+            latest build — extract and follow the setup steps below.
           </p>
         </div>
 
@@ -73,6 +75,18 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="relative mx-auto max-w-3xl px-6 pb-16">
+        <h2 className="font-display text-lg font-bold text-[var(--ink)]">
+          add it to your PATH
+        </h2>
+        <p className="mt-2 text-sm text-[var(--ink-dim)]">
+          so you can run it from anywhere, not just the download folder.
+        </p>
+        <div className="mt-6">
+          <InstallGuide />
+        </div>
+      </section>
+
       <section className="relative mx-auto max-w-3xl px-6 pb-24">
         <h2 className="font-display text-lg font-bold text-[var(--ink)]">
           the command set
@@ -86,10 +100,52 @@ export default function Home() {
       </section>
 
       <footer className="relative border-t border-[var(--line)] px-6 py-8">
-        <p className="mx-auto max-w-3xl text-xs text-[var(--ink-dim)]">
-          kit is a personal, from-scratch reimplementation of Git internals.
-          not affiliated with the Git project.
-        </p>
+        <div className="mx-auto flex max-w-3xl flex-col gap-4">
+          <p className="text-xs text-center text-[var(--ink-dim)]">
+            kit is a personal, from-scratch reimplementation of Git internals.
+            not affiliated with the Git project.
+          </p>
+          <div className="flex items-center justify-center gap-4">
+            <a
+              href="https://github.com/tier3guy"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub"
+              title="GitHub"
+              className="text-[var(--ink-dim)] transition-colors hover:text-[var(--ember-2)]"
+            >
+              <Github size={18} strokeWidth={1.75} />
+            </a>
+            <a
+              href="https://tier3guy.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Website"
+              title="tier3guy.com"
+              className="text-[var(--ink-dim)] transition-colors hover:text-[var(--ember-2)]"
+            >
+              <Globe size={18} strokeWidth={1.75} />
+            </a>
+            <a
+              href="https://www.linkedin.com/in/tier3guy/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+              title="LinkedIn"
+              className="text-[var(--ink-dim)] transition-colors hover:text-[var(--ember-2)]"
+            >
+              <Linkedin size={18} strokeWidth={1.75} />
+            </a>
+            <a
+              href="mailto:avinashgupta.works@gmail.com"
+              aria-label="Email"
+              title="Email"
+              className="text-[var(--ink-dim)] transition-colors hover:text-[var(--ember-2)]"
+            >
+              <Mail size={18} strokeWidth={1.75} />
+            </a>
+          </div>
+        </div>
       </footer>
     </main>
   );
