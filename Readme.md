@@ -12,15 +12,18 @@
 
 ## Why?
 
-Git is incredibly powerful.
+Git is one of the most powerful developer tools ever built—but its vocabulary has a steep learning curve.
 
-Its naming... isn't.
+Commands like `checkout`, `stash`, `remote`, or `reflog` make perfect sense once you understand Git's internal model, but they're far from intuitive when you're just getting started.
 
-When you're learning version control, commands like `checkout`, `stash`, `reflog`, or `remote` don't explain *what they actually do*.
+I built **kit** for two reasons:
 
-**kit** keeps Git's power while replacing command names with words that describe the action.
+* **To understand how Git works under the hood.** Building a Git wrapper forced me to explore Git's internals, command execution, repository structure, and object model instead of treating it as a black box.
+* **To experiment with data structures and CLI design.** The project became a playground for applying concepts like command parsing, lookup tables, and efficient mappings while building a polished native command-line tool.
 
-Instead of memorizing Git jargon, you read commands that make sense.
+The result is a familiar Git workflow with commands that read more like plain English.
+
+Instead of remembering Git's terminology, you focus on what you're trying to do.
 
 ```bash
 git add
@@ -31,6 +34,22 @@ becomes
 ```bash
 kit stage
 ```
+
+because you're **staging** changes.
+
+```bash
+git checkout feature/login
+```
+
+becomes
+
+```bash
+kit switch feature/login
+```
+
+because you're simply **switching** branches.
+
+The goal isn't to replace Git—it's to learn from it, make it a little friendlier, and have fun building something along the way.
 
 ---
 
@@ -224,34 +243,6 @@ kit/
 No.
 
 `kit` is a lightweight wrapper around Git that provides friendlier command names while relying on Git underneath.
-
----
-
-### Does it change my repositories?
-
-No.
-
-Repositories remain standard Git repositories.
-
-You can freely switch between `git` and `kit`.
-
----
-
-### Can I still use Git?
-
-Absolutely.
-
-These work interchangeably.
-
-```bash
-kit save -m "update"
-
-git status
-
-kit history
-
-git log
-```
 
 ---
 
