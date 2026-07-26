@@ -14,6 +14,7 @@ namespace kit {
 struct ParkEntry {
     bool is_dir = false;
     std::uintmax_t size = 0; // files only
+    std::string hash;        // files only -- blob hash in the object store
     std::string path;        // relative to the repository root
 };
 
@@ -48,8 +49,11 @@ class ParkList {
     std::vector<Park> parks_;
 };
 
-// Flattens a snapshot tree into the entry list a Park stores. Paths are
-// relative to `root`; the root node itself is not emitted.
-std::vector<ParkEntry> flatten(const Node& root);
+// Flattens a snapshot tree into the entry list a Park stores, writing each
+// file's content to the object store as a blob along the way -- so a park
+// captures actual bytes, not just a metadata listing. Paths are relative to
+// `root`; the root node itself is not emitted.
+std::vector<ParkEntry> flatten(const std::filesystem::path& kit_dir,
+                                const std::filesystem::path& root, const Node& root_node);
 
 } // namespace kit

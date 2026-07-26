@@ -1,5 +1,7 @@
 #include "park.h"
 
+#include "object_store.h"
+
 #include <fstream>
 #include <sstream>
 
@@ -9,7 +11,7 @@ namespace kit {
 
 namespace {
 
-const char* kHeader = "kit-parks 1";
+const char* kHeader = "kit-parks 2";
 
 fs::path parks_file(const fs::path& kit_dir) {
     return kit_dir / "parks";
@@ -25,24 +27,37 @@ std::string one_line(std::string text) {
     return text;
 }
 
-void flatten_into(const Node& node, const std::string& prefix,
-                  std::vector<ParkEntry>& out) {
+std::string read_file(const fs::path& path) {
+    std::ifstream in(path, std::ios::binary);
+    std::ostringstream ss;
+    ss << in.rdbuf();
+    return ss.str();
+}
+
+void flatten_into(const fs::path& kit_dir, const fs::path& abs_prefix, const Node& node,
+                   const std::string& rel_prefix, std::vector<ParkEntry>& out) {
     for (const auto& child : node.children) {
-        const std::string path = prefix.empty() ? child->name : prefix + "/" + child->name;
+        const std::string rel_path =
+            rel_prefix.empty() ? child->name : rel_prefix + "/" + child->name;
+        const fs::path abs_path = abs_prefix / child->name;
+
         if (child->is_tree()) {
-            out.push_back(ParkEntry{true, 0, path});
-            flatten_into(*child, path, out);
+            out.push_back(ParkEntry{true, 0, "", rel_path});
+            flatten_into(kit_dir, abs_path, *child, rel_path, out);
         } else {
-            out.push_back(ParkEntry{false, child->size, path});
+            const std::string content = read_file(abs_path);
+            const std::string hash = write_object(kit_dir, ObjectType::Blob, content);
+            out.push_back(ParkEntry{false, child->size, hash, rel_path});
         }
     }
 }
 
 } // namespace
 
-std::vector<ParkEntry> flatten(const Node& root) {
+std::vector<ParkEntry> flatten(const fs::path& kit_dir, const fs::path& root,
+                                const Node& root_node) {
     std::vector<ParkEntry> entries;
-    flatten_into(root, "", entries);
+    flatten_into(kit_dir, root, root_node, "", entries);
     return entries;
 }
 
@@ -97,13 +112,14 @@ bool ParkList::load(const fs::path& kit_dir) {
             ls >> std::ws;
             std::string p;
             std::getline(ls, p);
-            parks_.back().entries.push_back(ParkEntry{true, 0, p});
+            parks_.back().entries.push_back(ParkEntry{true, 0, "", p});
         } else if (tag == "f") {
+            std::string hash;
             std::uintmax_t size = 0;
-            ls >> size >> std::ws;
+            ls >> hash >> size >> std::ws;
             std::string p;
             std::getline(ls, p);
-            parks_.back().entries.push_back(ParkEntry{false, size, p});
+            parks_.back().entries.push_back(ParkEntry{false, size, hash, p});
         } else if (!tag.empty()) {
             return false; // unknown tag
         }
@@ -130,7 +146,7 @@ bool ParkList::save(const fs::path& kit_dir) const {
                 if (e.is_dir) {
                     out << "d " << e.path << "\n";
                 } else {
-                    out << "f " << e.size << " " << e.path << "\n";
+                    out << "f " << e.hash << " " << e.size << " " << e.path << "\n";
                 }
             }
         }
@@ -153,3 +169,4 @@ bool ParkList::save(const fs::path& kit_dir) const {
 }
 
 } // namespace kit
+
