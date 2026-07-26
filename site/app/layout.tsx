@@ -14,6 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased">
+      <head>
+        <link rel="icon" href="/public/icon.png"></link>
+      </head>
       <body className="min-h-full flex flex-col bg-[#0D0B09] text-[#F2EDE4]">
         {children}
       </body>
